@@ -11,9 +11,16 @@ interface Country {
 	independent: boolean;
 }
 
+const enum SortDirection {
+	Unsorted,
+	Asc,
+	Desc,
+}
+
 function App() {
 	const [loading, setLoading] = useState(false);
 	const [countries, setCountries] = useState<Country[]>([]);
+	const [sorted, setSorted] = useState(SortDirection.Unsorted);
 
 	useEffect(() => {
 		setLoading(true);
@@ -30,13 +37,55 @@ function App() {
 			});
 	}, []);
 
+	const toggleSort = () => {
+		setSorted((state) => {
+			if (state === SortDirection.Unsorted) return SortDirection.Asc;
+			else if (state === SortDirection.Asc) return SortDirection.Desc;
+			else return SortDirection.Unsorted;
+		});
+	};
+
+	const sortingArrow = () => {
+		if (sorted === SortDirection.Asc)
+			return <div className="ms-2 arrow-up"></div>;
+		else if (sorted === SortDirection.Desc)
+			return <div className="ms-2 arrow-down"></div>;
+		else return <></>;
+	};
+
 	return (
 		<div className="App container mt-4">
 			<h2>Countries List</h2>
 
-			<div className="content mt-5">
+			<div className="btn-toolbar mt-3" role="toolbar">
+				<div className="btn-group me-2 mt-3" role="group">
+					<button
+						type="button"
+						className={`btn btn-outline-secondary d-flex align-items-center me-2 ${
+							sorted !== SortDirection.Unsorted ? "active" : ""
+						}`}
+						onClick={toggleSort}
+					>
+						Sort {sortingArrow()}
+					</button>
+					<button
+						type="button"
+						className="btn btn-outline-secondary me-2"
+					>
+						In Oceania region
+					</button>
+					<button
+						type="button"
+						className="btn btn-outline-secondary me-2 active"
+					>
+						Smaller than Lithuania
+					</button>
+				</div>
+			</div>
+
+			<div className="content mt-3">
 				{loading && (
-					<div className="d-flex justify-content-center">
+					<div className="d-flex justify-content-center mt-5">
 						<div className="spinner-border" role="status">
 							<span className="visually-hidden">Loading...</span>
 						</div>
@@ -46,10 +95,13 @@ function App() {
 				{countries.map((country) => (
 					<div className="card mb-3">
 						<div className="card-body">
-              <p>Country: {country.name}</p>
-              <p>Region: {country.region}</p>
-              <p>Area Size: {Number(country.area).toLocaleString()}</p>
-            </div>
+							<p>Country: {country.name}</p>
+							<p>Region: {country.region}</p>
+							<p>
+								Area Size:{" "}
+								{Number(country.area).toLocaleString()}
+							</p>
+						</div>
 					</div>
 				))}
 			</div>

@@ -2,5 +2,31 @@
 @import "bootstrap/scss/bootstrap";
 
 .content {
-   min-height: 300px;
+	min-height: 300px;
+}
+
+.arrow-up {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #fff;
+}
+
+.arrow-down {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #fff;
+}
+
+.btn-outline-secondary.active:focus,
+.btn-outline-secondary:focus {
+	box-shadow: none;
+}
+
+.btn-outline-secondary:hover {
+   border-color: #c5c5c5;
+   background-color: #c5c5c5;
 }
