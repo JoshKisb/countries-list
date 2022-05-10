@@ -21,7 +21,9 @@ function App() {
 	const [loading, setLoading] = useState(false);
 	const [countries, setCountries] = useState<Country[]>([]);
 	const [unsortedCountries, setUnsortedCountries] = useState<Country[]>([]);
-	const [sorted, setSorted] = useState(SortDirection.Unsorted);
+  const [sorted, setSorted] = useState(SortDirection.Unsorted);
+  const [regionFiltered, setRegionFiltered] = useState(false);
+  const [areaFiltered, setAreaFiltered] = useState(false);
 
 	useEffect(() => {
 		setLoading(true);
@@ -88,13 +90,15 @@ function App() {
 					</button>
 					<button
 						type="button"
-						className="btn btn-outline-secondary me-2"
+            className={`btn btn-outline-secondary me-2 ${regionFiltered ? "active": ""}`}
+            onClick={() => setRegionFiltered(!regionFiltered)}
 					>
 						In Oceania region
 					</button>
 					<button
 						type="button"
-						className="btn btn-outline-secondary me-2 active"
+            className={`btn btn-outline-secondary me-2 ${areaFiltered ? "active": ""}`}
+            onClick={() => setAreaFiltered(!areaFiltered)}
 					>
 						Smaller than Lithuania
 					</button>
