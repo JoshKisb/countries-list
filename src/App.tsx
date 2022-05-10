@@ -20,6 +20,7 @@ const enum SortDirection {
 function App() {
 	const [loading, setLoading] = useState(false);
 	const [countries, setCountries] = useState<Country[]>([]);
+	const [unsortedCountries, setUnsortedCountries] = useState<Country[]>([]);
 	const [sorted, setSorted] = useState(SortDirection.Unsorted);
 
 	useEffect(() => {
@@ -27,7 +28,7 @@ function App() {
 		axios
 			.get(apiUrl)
 			.then((response) => {
-				setCountries(response.data);
+				setUnsortedCountries(response.data);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -44,6 +45,23 @@ function App() {
 			else return SortDirection.Unsorted;
 		});
 	};
+
+	useEffect(() => {
+		if (unsortedCountries.length === 0) return;
+
+		if (sorted === SortDirection.Unsorted) setCountries(unsortedCountries);
+		else {
+			setCountries(
+				unsortedCountries.concat().sort((a, b) => {
+					let first = a.name.toLowerCase();
+					let second = b.name.toLowerCase();
+					if (sorted === SortDirection.Desc)
+						[first, second] = [second, first]; // swap the variables
+					return first.localeCompare(second);
+				})
+			);
+		}
+	}, [sorted, unsortedCountries]);
 
 	const sortingArrow = () => {
 		if (sorted === SortDirection.Asc)
@@ -93,7 +111,7 @@ function App() {
 				)}
 
 				{countries.map((country) => (
-					<div className="card mb-3">
+					<div className="card mb-3" key={country.name}>
 						<div className="card-body">
 							<p>Country: {country.name}</p>
 							<p>Region: {country.region}</p>
